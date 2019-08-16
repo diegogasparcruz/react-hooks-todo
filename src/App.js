@@ -5,9 +5,11 @@ import { Typography } from '@material-ui/core';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 
+import useTodoState from './useTodoState';
+
 const App = () => {
 
-  const [todos, setTodos] = useState([]);
+  const { todos, addTodo, deleteTodo } = useTodoState([]);
 
   return (
     <div className="App">
@@ -15,22 +17,16 @@ const App = () => {
         Todos
       </Typography>
 
-      <TodoForm saveTodo={ (todoText) => {
+      <TodoForm 
+        saveTodo={ (todoText) => {
           const trimmedText = todoText.trim();
 
           if(trimmedText.length > 0){
-            setTodos([...todos, trimmedText]);
+            addTodo(trimmedText);
           }
         }} 
       />
-      <TodoList 
-        todos={ todos } 
-        deleteTodo={(todoIndex) => {
-          const newTodos = todos.filter((_, index) => index !== todoIndex);
-
-          setTodos(newTodos);
-        }}
-      />
+      <TodoList todos={ todos } deleteTodo={deleteTodo} />
     </div>
   );
 }
